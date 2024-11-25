@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart EcoCycle</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="js/index.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Smart<span class="eco">EcoCycle</span></div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li>
+            <a href="recycleCentres.html">Recycle Centres</a>
+          </li>
+          <li><a href="#">Education</a></li>
+          <li><a href="#">How it Works?</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </nav>
+      <div class="menu-icon">
+        <div class="center">
+          <button id="show-login">Sign In</button>
+        </div>
+      </div>
+    </header>
+    <div class="popup">
+      <div class="close-btn">&times;</div>
+      <div class="form">
+        <h2>Log In</h2>
+        <div class="form-element user-type">
+          <label>
+            <input type="radio" name="userType" value="user" required />
+            <span>User</span>
+          </label>
+          <label>
+            <input type="radio" name="userType" value="recycler" />
+            <span>Recycler</span>
+          </label>
+        </div>
+        <div class="form-element">
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            placeholder="(+880) Mobile Number"
+            value=""
+            id="phone"
+            name="phone"
+            pattern="[0-9]{10}"
+            required
+          />
+        </div>
+        <div class="form-element">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            id="password"
+            required
+          />
+        </div>
+        <div class="form-element" style="float: right">
+          <a href="#">Forgot Password?</a>
+        </div>
+        <div class="form-element">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <div class="form-element">
+          <button>Log in</button>
+        </div>
+
+        <div class="form-element" style="float: left">
+          <a href="#">Don't have and account?</a>
+        </div>
+      </div>
+    </div>
+    <main>
+      <div class="left-box">
+        <h2>Recycle anywhere with Smart Ecocycle</h2>
+        <p>Request a recycler with one tap.</p>
+        <form>
+          <input type="text" placeholder="Enter Your Address" />
+          <select>
+            <option>Select Product Type</option>
+            <option>Plastic</option>
+            <option>Glass</option>
+            <option>Metal</option>
+          </select>
+          <button type="button" id="popupButton">See Prices</button>
+        </form>
+      </div>
+      <div class="recycle-overlay" id="overlay">
+        <div class="recycle-container">
+          <h1>Request For Recycle</h1>
+          <form action="#">
+            <div class="recycle-form-group recycle-address-group">
+              <label for="address">Your Address:</label>
+              <div class="recycle-address-input">
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="*User's address*"
+                  required
+                />
+                <button class="recycle-change-btn">Change</button>
+              </div>
+            </div>
+            <div class="recycle-form-group recycle-horizontal-group">
+              <div>
+                <label for="area">Area:</label>
+                <input
+                  type="text"
+                  id="area"
+                  placeholder="e.g. Banani"
+                  required
+                />
+              </div>
+              <div>
+                <label for="city">City:</label>
+                <input
+                  type="text"
+                  id="city"
+                  placeholder="e.g. Dhaka"
+                  required
+                />
+              </div>
+            </div>
+            <div class="recycle-form-group">
+              <label>Product Type:</label>
+              <div class="recycle-product-types">
+                <button
+                  type="button"
+                  class="recycle-product-btn"
+                  data-type="paper"
+                >
+                  Paper
+                </button>
+                <button
+                  type="button"
+                  class="recycle-product-btn"
+                  data-type="glass"
+                >
+                  Glass
+                </button>
+                <button
+                  type="button"
+                  class="recycle-product-btn"
+                  data-type="metal"
+                >
+                  Metal
+                </button>
+                <button
+                  type="button"
+                  class="recycle-product-btn"
+                  data-type="plastic"
+                >
+                  Plastic
+                </button>
+                <button
+                  type="button"
+                  class="recycle-product-btn"
+                  data-type="hazardous"
+                >
+                  Hazardous
+                </button>
+              </div>
+            </div>
+            <div class="recycle-form-group">
+              <label for="amount">Amount of Product:</label>
+              <input type="number" id="amount" value="1" required />
+            </div>
+            <div class="recycle-form-group">
+              <button type="submit" class="recycle-submit-btn">
+                Call for Recycler
+              </button>
+              <p class="recycle-note">
+                *Note that a platform fee will be charged*
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <script src="script.js"></script>
+      <div class="right-box">
+        <h2>Recycle when you want, make what you need</h2>
+        <p>
+          Make money on your schedule with recycling. You can use your own
+          effort or choose a recycler through Smart Ecocycle.
+        </p>
+        <button>Get Started</button>
+        <p>Don’t have an account? <a href="#">Sign Up</a></p>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-logo">smart<span class="eco">ecocycle</span>.com</div>
+      <div class="footer-links">
+        <div>
+          <a href="#">About Us</a><a href="#">Privacy</a
+          ><a href="#">Terms of Service</a>
+        </div>
+        <div>
+          <a href="#">News</a><a href="#">Help</a><a href="#">Volunteer</a>
+        </div>
+        <div>
+          <a href="#">Contact</a><a href="#">Donate</a><a href="#">Find Us</a>
+        </div>
+      </div>
+      <div class="social-icons">
+        <a href="#"><img src="facebook_logo.png" alt="Facebook" /></a>
+        <a href="#"><img src="X_logo.png" alt="X" /></a>
+        <a href="#"><img src="insta_logo.png" alt="Instagram" /></a>
+      </div>
+    </footer>
+  </body>
+</html>
