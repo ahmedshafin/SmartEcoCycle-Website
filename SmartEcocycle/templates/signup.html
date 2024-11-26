@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle Website - Sign Up</title>
+    <link rel="stylesheet" href="{% static 'signup.css' %}" />
+</head>
+<body>
+    <div class="signup-container">
+        <h1>Sign Up</h1>
+        <div class="toggle-buttons">
+            <button id="userBtn" class="active">User</button>
+            <button id="recyclerBtn">Recycler Center</button>
+        </div>
+        <form id="signupForm" action="/signup-api/" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" id="signupBtn">Sign Up</button>
+        </form>
+    </div>
+    <script src="{% static 'signup.js' %}"></script>
+</body>
+</html>
