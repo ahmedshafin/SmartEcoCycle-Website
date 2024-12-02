@@ -5,16 +5,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserSignup
 from .serializers import UserSignupSerializer
-
+from django.http import HttpResponseRedirect
 
 #homepage
 def viewHomepage(request):
     return render(request, 'index.html')
 
 
-#success message
-def success(request):
-    return render(request, 'success.html')
+#fail message
+def fail(request):
+    return render(request, 'fail.html')
 
 def signup_form_page(request):
     return render(request, 'register.html')
@@ -28,5 +28,7 @@ class UserSignupView(APIView):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Redirect to the homepage on success
+            return HttpResponseRedirect(redirect_to='/')
+        # Redirect to the unsuccessful page on failure
+        return HttpResponseRedirect(redirect_to='/fail')
