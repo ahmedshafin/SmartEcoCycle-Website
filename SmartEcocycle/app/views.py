@@ -7,7 +7,7 @@ from .models import UserSignup
 from .serializers import UserSignupSerializer
 
 
-
+#success message
 def success(request):
     return render(request, 'success.html')
 

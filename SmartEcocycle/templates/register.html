@@ -59,6 +59,21 @@
             display: none;
         }
     </style>
+
+<script>
+    // JavaScript function to show/hide additional fields based on selected role
+    function showRoleInfo() {
+        var role = document.getElementById("role").value;
+        var recycleCenterInfo = document.getElementById("recycleCenterInfo");
+        
+        // Show Recycle Center fields if "recycle-center" role is selected
+        if (role === "recycle-center") {
+            recycleCenterInfo.style.display = "block";
+        } else {
+            recycleCenterInfo.style.display = "none";
+        }
+    }
+</script>
 </head>
 <body>
     <div class="signup-container">
