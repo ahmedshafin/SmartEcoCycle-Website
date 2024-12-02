@@ -1,9 +1,8 @@
-# urls.py
+# signup/urls.py
 from django.urls import path
-from .views import *
+from . import views
 
 urlpatterns = [
-    path('', viewHomepage.as_view(), name='homepage'),
-    path('signup/', SignUpPageView.as_view(), name='signup'),
-    path('api/signup/', SignUpView.as_view(), name='signup-api'),
+    path('signup/', views.signup_form, name='user-signup'),  # Handle form submission via POST
+    path('signup-success/', views.success, name='signup-success'),  # Success page after signup
 ]

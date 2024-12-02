@@ -1,38 +1,51 @@
-from django.shortcuts import render
+# signup/views.py
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import SignUpSerializer
-from django.views import View
-
-# Create your views here.
-
-class viewHomepage(View):
-    def get(self, request):
-        return render(request, 'index.html')
+from .models import UserSignup
+from .serializers import UserSignupSerializer
 
 
-class SignUpPageView(View):
-    def get(self, request):
-        return render(request, 'signup.html')
+
+def success(request):
+    return render(request, 'success.html')
 
 
-class SignUpView(APIView):
+# This is the view that serves the form
+def signup_form(request):
+    if request.method == 'POST':
+        # Get the form data from request.POST
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        role = request.POST.get('role')
+        center_name = request.POST.get('center_name', None)
+        location = request.POST.get('location', None)
+        contact = request.POST.get('contact', None)
+
+        # Create a new user signup object
+        user_signup = UserSignup(
+            full_name=full_name,
+            email=email,
+            password=password,
+            role=role,
+            center_name=center_name,
+            location=location,
+            contact=contact
+        )
+        user_signup.save()
+
+        # After saving the user, you can redirect to a success page or back to the form
+        return redirect('signup-success')
+
+    return render(request, 'register.html')
+
+# If you want to handle the API endpoint using DRF
+class UserSignupView(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = SignUpSerializer(data=request.data)
+        serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
-            
-            # Here you can create the user or perform other actions
-            # For example, save the user:
-            # user = User.objects.create(
-            #     name=serializer.validated_data['name'],
-            #     email=serializer.validated_data['email'],
-            #     phone=serializer.validated_data['phone'],
-            #     password=serializer.validated_data['password']
-            # )
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        print(serializer)
-        
+            serializer.save()
+            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-

@@ -1,16 +1,8 @@
-# serializers.py
+# signup/serializers.py
 from rest_framework import serializers
+from .models import UserSignup
 
-class SignUpSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
-    email = serializers.EmailField()
-    dob = serializers.DateField()
-    phone = serializers.CharField(max_length=15)
-    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
-    confirm_password = serializers.CharField(write_only=True, style={'input_type': 'password'})
-    
-    def validate(self, data):
-        # Check if the passwords match
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords do not match")
-        return data
+class UserSignupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSignup
+        fields = ['full_name', 'email', 'password', 'role', 'center_name', 'location', 'contact']
