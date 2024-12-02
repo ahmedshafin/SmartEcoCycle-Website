@@ -61,16 +61,59 @@
     </style>
 
 <script>
-    // JavaScript function to show/hide additional fields based on selected role
+    // Function to handle role-specific fields
     function showRoleInfo() {
-        var role = document.getElementById("role").value;
-        var recycleCenterInfo = document.getElementById("recycleCenterInfo");
-        
-        // Show Recycle Center fields if "recycle-center" role is selected
-        if (role === "recycle-center") {
-            recycleCenterInfo.style.display = "block";
-        } else {
-            recycleCenterInfo.style.display = "none";
+        const role = document.getElementById("role").value;
+        const recycleCenterInfo = document.getElementById("recycleCenterInfo");
+        recycleCenterInfo.style.display = role === "recycle-center" ? "block" : "none";
+    }
+
+    // Function to submit form data via AJAX
+    async function submitForm(event) {
+        event.preventDefault();
+
+        const formData = {
+            full_name: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            role: document.getElementById("role").value,
+            center_name: document.getElementById("centerName").value || null,
+            location: document.getElementById("location").value || null,
+            contact: document.getElementById("contact").value || null,
+        };
+
+        try {
+            const response = await fetch('/api/signup/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}', // If CSRF protection is enabled
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("User created successfully!");
+            } else {
+                displayErrors(data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+
+    function displayErrors(errors) {
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.innerHTML = '';
+
+        for (const [field, messages] of Object.entries(errors)) {
+            const errorMessage = document.createElement('p');
+            errorMessage.className = 'error';
+            errorMessage.textContent = `${field}: ${messages.join(', ')}`;
+            errorContainer.appendChild(errorMessage);
         }
     }
 </script>
