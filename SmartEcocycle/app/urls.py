@@ -10,4 +10,5 @@ urlpatterns = [
     path('signup/', signup_form_page, name='signup-form'),
     path('api/login/', LoginView.as_view(), name='login'),
     path('user/', views.userHomepage, name='user'),
+    path('recycler/', views.recyclerHomepage, name='recycler'),
 ]

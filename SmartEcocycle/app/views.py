@@ -24,6 +24,10 @@ def signup_form_page(request):
 def userHomepage(request):
     return render(request, 'user.html')
 
+#Recycler Homepage 
+def recyclerHomepage(request):
+    return render(request, 'recycler.html')
+
 
 # If you want to handle the API endpoint using DRF
 class UserSignupView(APIView):
@@ -47,7 +51,9 @@ class LoginView(APIView):
         try:
             user = UserSignup.objects.get(email=email)
             if user.password == password:  # Compare plain-text passwords
-                return HttpResponseRedirect(redirect_to='/user')
+                if user.role == 'user':
+                    return HttpResponseRedirect(redirect_to='/user')
+                else: return HttpResponseRedirect(redirect_to='/recycler')
             else:
                 return HttpResponse('Invalid password')
         except UserSignup.DoesNotExist:
