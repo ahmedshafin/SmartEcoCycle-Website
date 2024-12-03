@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserSignup
 from .serializers import UserSignupSerializer
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password
 
 #homepage
@@ -19,6 +19,10 @@ def fail(request):
 
 def signup_form_page(request):
     return render(request, 'register.html')
+
+#User Homepage 
+def userHomepage(request):
+    return render(request, 'user.html')
 
 
 # If you want to handle the API endpoint using DRF
@@ -43,17 +47,8 @@ class LoginView(APIView):
         try:
             user = UserSignup.objects.get(email=email)
             if user.password == password:  # Compare plain-text passwords
-                return Response(
-                    {"message": "Login successful", "role": user.role},
-                    status=status.HTTP_200_OK
-                )
+                return HttpResponseRedirect(redirect_to='/user')
             else:
-                return Response(
-                    {"message": "Invalid password"},
-                    status=status.HTTP_401_UNAUTHORIZED
-                )
+                return HttpResponse('Invalid password')
         except UserSignup.DoesNotExist:
-            return Response(
-                {"message": "User not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return HttpResponse("User not found")
