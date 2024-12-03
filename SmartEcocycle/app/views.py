@@ -22,6 +22,7 @@ def signup_form_page(request):
 
 #User Homepage 
 def userHomepage(request):
+
     return render(request, 'user.html')
 
 #Recycler Homepage 
