@@ -43,16 +43,17 @@
           </label>
         </div>
         <div class="form-element">
-          <label for="phone">Phone</label>
-          <input
-            type="tel"
-            placeholder="(+880) Mobile Number"
-            value=""
-            id="phone"
-            name="phone"
-            pattern="[0-9]{10}"
-            required
-          />
+          <form action="/api/login/" method="POST">
+            {% csrf_token %}
+            <label for="phone">Email</label>
+            <input
+              type="email"
+              placeholder="Write email"
+              value=""
+              id="email"
+              name="email"
+              required
+            />
         </div>
         <div class="form-element">
           <label for="password">Password</label>
@@ -79,6 +80,7 @@
           <a href="signup">Don't have and account?</a>
         </div>
       </div>
+    </form>
     </div>
     <main>
       <div class="left-box">
@@ -201,8 +203,7 @@
       <div class="footer-logo">smart<span class="eco">ecocycle</span>.com</div>
       <div class="footer-links">
         <div>
-          <a href="#">About Us</a><a href="#">Privacy</a
-          ><a href="#">Terms of Service</a>
+          <a href="#">About Us</a><a href="#">Privacy</a><a href="#">Terms of Service</a>
         </div>
         <div>
           <a href="#">News</a><a href="#">Help</a><a href="#">Volunteer</a>

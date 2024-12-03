@@ -57,3 +57,44 @@ function updateMap() {
       alert("Unable to fetch location data.");
     });
 }
+
+
+
+//Login authentication
+document.querySelector("form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (email && password) {
+    fetch("/api/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email, password: password }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.message === "Login successful") {
+        if (data.role === "user") {
+          window.location.href = "/user.html";
+        } else if (data.role === "recycler") {
+          window.location.href = "/recycler_dashboard.html";
+        } else {
+          alert("Role not recognized.");
+        }
+      } else {
+        alert(data.message || "Login failed");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred during login.");
+    });
+  } else {
+    alert("Please enter both email and password.");
+  }
+});
+
+
