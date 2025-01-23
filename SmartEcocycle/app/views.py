@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import UserSignup
 from .serializers import *
 from django.http import HttpResponseRedirect,HttpResponse
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 
 #homepage
 def viewHomepage(request):
@@ -22,7 +22,8 @@ def signup_form_page(request):
 
 #User Homepage 
 def userHomepage(request):
-
+    if not request.session.get('is_authenticated'):  # Check session authentication
+        return redirect('homepage')  # Redirect to login page if not authenticated
     return render(request, 'user.html')
 
 #Recycler Homepage 
@@ -48,17 +49,27 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        # Validate email and password
         try:
             user = UserSignup.objects.get(email=email)
-            if user.password == password:  # Compare plain-text passwords
+
+            # Secure password comparison
+            if user.password == password:
+                # Set session
+                request.session['is_authenticated'] = True
+                request.session['user_role'] = user.role
+
                 if user.role == 'user':
                     return HttpResponseRedirect(redirect_to='/user')
-                else: return HttpResponseRedirect(redirect_to='/recycler')
+                else:
+                    return HttpResponseRedirect(redirect_to='/recycler')
             else:
                 return HttpResponse('Invalid password')
         except UserSignup.DoesNotExist:
             return HttpResponse("User not found")
+
+    def get(self, request):
+        # Render the login page
+        return render(request, 'index.html')
         
 
 #Contact Us
@@ -76,5 +87,9 @@ class contactUs(APIView):
 def contactUsView(request):
     return render(request, 'contact.html')
 
+#Logout
+def logout(request):
+    request.session.flush()  # Clear all session data
+    return redirect('homepage')
     
 
