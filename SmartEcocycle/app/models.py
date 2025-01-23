@@ -14,3 +14,11 @@ class UserSignup(models.Model):
 
     def __str__(self):
         return self.full_name
+    
+
+class contactUsModel(models.Model):
+    contactFullName = models.CharField(max_length=50)
+    contactEmail = models.CharField(max_length=50)
+    contactPhoneNumber = models.CharField(max_length= 15)
+    contactSubject = models.CharField(max_length=50)
+    contactMessage = models.TextField()

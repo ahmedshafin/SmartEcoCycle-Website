@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import UserSignup
-from .serializers import UserSignupSerializer
+from .serializers import *
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password
 
@@ -30,7 +30,7 @@ def recyclerHomepage(request):
     return render(request, 'recycler.html')
 
 
-# If you want to handle the API endpoint using DRF
+# Signup
 class UserSignupView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserSignupSerializer(data=request.data)
@@ -59,3 +59,22 @@ class LoginView(APIView):
                 return HttpResponse('Invalid password')
         except UserSignup.DoesNotExist:
             return HttpResponse("User not found")
+        
+
+#Contact Us
+class contactUs(APIView):
+    def post(self, request):
+        
+        serializer = contactSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponseRedirect(redirect_to='/')
+        
+        return HttpResponseRedirect(redirect_to='/fail')
+    
+#Contact Us render
+def contactUsView(request):
+    return render(request, 'contact.html')
+
+    
+

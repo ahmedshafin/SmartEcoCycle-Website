@@ -1,7 +1,7 @@
 # signup/urls.py
 from django.urls import path
 from . import views 
-from .views import UserSignupView, signup_form_page,LoginView
+from .views import *
 
 urlpatterns = [
     path('', views.viewHomepage, name='homepage'),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('user/', views.userHomepage, name='user'),
     path('recycler/', views.recyclerHomepage, name='recycler'),
+    path('contact/',views.contactUs.as_view(), name='contact'),
+    path('contactUs/',views.contactUsView, name='contactUs'),
 ]
