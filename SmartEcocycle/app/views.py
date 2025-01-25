@@ -62,8 +62,10 @@ class LoginView(APIView):
 
                 if user.role == 'user':
                     return HttpResponseRedirect(redirect_to='/user')
-                else:
+                elif user.role == 'recycle-center':
                     return HttpResponseRedirect(redirect_to='/recycler')
+                else:
+                    return HttpResponseRedirect(redirect_to='/superAdmin')
             else:
                 return HttpResponse('Invalid password')
         except UserSignup.DoesNotExist:
@@ -93,5 +95,12 @@ def contactUsView(request):
 def logout(request):
     request.session.flush()  # Clear all session data
     return redirect('homepage')
+
+
+#Super Admin
+def superAdmin(request):
+    if not request.session.get('is_authenticated'):  # Check session authentication
+        return redirect('homepage')  # Redirect to login page if not authenticated
+    return render(request, 'admin.html')
     
 

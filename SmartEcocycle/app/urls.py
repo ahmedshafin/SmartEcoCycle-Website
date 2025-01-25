@@ -14,4 +14,5 @@ urlpatterns = [
     path('contact/',views.contactUs.as_view(), name='contact'),
     path('contactUs/',views.contactUsView, name='contactUs'),
     path('logout/',views.logout, name='logout'),
+    path('superAdmin/',views.superAdmin, name='superAdmin'),
 ]
