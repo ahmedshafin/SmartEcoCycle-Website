@@ -28,6 +28,8 @@ def userHomepage(request):
 
 #Recycler Homepage 
 def recyclerHomepage(request):
+    if not request.session.get('is_authenticated'):  # Check session authentication
+        return redirect('homepage')
     return render(request, 'recycler.html')
 
 
