@@ -16,4 +16,5 @@ urlpatterns = [
     path('contactUs/',views.contactUsView, name='contactUs'),
     path('logout/',views.logout, name='logout'),
     path('superAdmin/',views.superAdmin, name='superAdmin'),
+    path('app/login/', AppLoginView.as_view(), name='applogin'),
 ]
