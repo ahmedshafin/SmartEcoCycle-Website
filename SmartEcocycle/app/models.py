@@ -22,3 +22,22 @@ class contactUsModel(models.Model):
     contactPhoneNumber = models.CharField(max_length= 15)
     contactSubject = models.CharField(max_length=50)
     contactMessage = models.TextField()
+
+
+#Pickup
+
+
+
+
+class PickupRequest(models.Model):
+    address = models.CharField(max_length=255, default="Unknown")
+    quantity = models.CharField(max_length=50, default="Unknown")
+    contact = models.CharField(max_length=15, default="Unknown")
+    latitude = models.DecimalField(max_digits=9, decimal_places=7)
+    longitude = models.DecimalField(max_digits=9, decimal_places=7)
+    status = models.CharField(max_length=20, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Pickup at {self.address} ({self.quantity})"
+

@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import UserSignup
+from .models import *
 from .serializers import *
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
+from rest_framework import generics
 
 #homepage
 def viewHomepage(request):
@@ -135,4 +136,18 @@ class AppLoginView(APIView):
                 return Response({'message': 'Invalid password'}, status=status.HTTP_401_UNAUTHORIZED)
         except UserSignup.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class PickupRequestView(APIView):
+    def post(self, request):
+        serializer = PickupRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Pickup request created successfully!'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class PickupRequestCreateView(generics.CreateAPIView):
+    queryset = PickupRequest.objects.all()
+    serializer_class = PickupRequestSerializer
 

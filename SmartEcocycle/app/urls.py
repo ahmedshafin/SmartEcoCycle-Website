@@ -17,4 +17,5 @@ urlpatterns = [
     path('logout/',views.logout, name='logout'),
     path('superAdmin/',views.superAdmin, name='superAdmin'),
     path('app/login/', AppLoginView.as_view(), name='applogin'),
+    path('api/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
 ]
