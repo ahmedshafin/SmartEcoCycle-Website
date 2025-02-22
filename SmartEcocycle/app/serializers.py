@@ -23,4 +23,11 @@ class PickupRequestSerializer(serializers.ModelSerializer):
         fields = ['id', 'address', 'quantity', 'contact', 'latitude', 'longitude', 'status', 'created_at']
 
 
-    
+
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = contactUsModel
+        fields = '__all__'
+  

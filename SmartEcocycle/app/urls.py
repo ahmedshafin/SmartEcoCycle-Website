@@ -18,4 +18,5 @@ urlpatterns = [
     path('superAdmin/',views.superAdmin, name='superAdmin'),
     path('app/login/', AppLoginView.as_view(), name='applogin'),
     path('api/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
+    path('api/contact/', ContactUsAPIView.as_view(), name='contact-us'),
 ]

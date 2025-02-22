@@ -151,3 +151,12 @@ class PickupRequestCreateView(generics.CreateAPIView):
     queryset = PickupRequest.objects.all()
     serializer_class = PickupRequestSerializer
 
+
+class ContactUsAPIView(APIView):
+    def post(self, request, format=None):
+        serializer = ContactUsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Your message has been sent successfully!'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
