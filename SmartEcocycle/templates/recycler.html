@@ -7,6 +7,26 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="/static/dashboard.css">
     <title>SmartEcocycle</title>
+    <style>
+        .track-button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition-duration: 0.4s;
+      }
+
+    .track-button:hover {
+        background-color: #037609; /* Darker green */
+      }
+    </style>
 </head>
 
 <body>
@@ -154,18 +174,46 @@
 
             <!-- Recent Orders Table -->
             <div class="recent-orders">
-                <h2>Recent Orders</h2>
+                <h2>Pickup Request</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>Course Name</th>
-                            <th>Course Number</th>
-                            <th>Payment</th>
+                            <th>Address</th>
+                            <th>Quantity</th>
+                            <th>Contact</th>
                             <th>Status</th>
-                            <th></th>
+                            <th>Track</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody>
+                        {% for i in pickup %}
+                        <tr>
+                            <td>
+                                <p>{{i.address}}</p>
+                            </td>
+                            <td>
+                                <p>{{i.quantity}}</p>
+                            </td>
+                            <td>
+                                <p>{{i.contact}}</p>
+                            </td>
+                            <td>
+                                <p>{{i.status}}</p>
+                            </td>
+                            <form action ="{% url 'map' i.id %}" method="POST">
+                                {% csrf_token %}
+                                <td>
+                                    <span class="track-button">
+                                      <i class="fas fa-map-marker-alt icon"></i>
+                                      <input type="submit" name="track" value="Track" style="background-color: transparent; border: none; color: inherit; cursor: inherit;">
+                                    </span>
+                                  </td>
+                            </form>
+                        </tr>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 <a href="#">Show All</a>
             </div>

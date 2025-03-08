@@ -339,6 +339,7 @@ main .new-users .user-list .user img{
     border-radius: 50%;
 }
 
+
 main .recent-orders{
     margin-top: 1.3rem;
 }
@@ -704,5 +705,7 @@ main .recent-orders a{
     .right-section .nav button span{
         font-size: 2rem;
     }
+
+    
 
 }

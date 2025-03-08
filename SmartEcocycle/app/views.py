@@ -8,6 +8,7 @@ from .serializers import *
 from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 
 #homepage
 def viewHomepage(request):
@@ -36,6 +37,7 @@ def recyclerHomepage(request):
     
     
     args = {
+        "pickup": pickup,
         "pickup_count": pickup_count,
         
     }
@@ -169,22 +171,15 @@ class ContactUsAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-#Recycler Dashboard
-#Admin Dashboard
-def recycler_dashboard(request):
-    
-    pickup = PickupRequest.objects.filter()
-    pickup_count= len(pickup)
-    all_users = User.objects.all()
-    user_count = len(all_users)
-    
-    
-    
-    
-    args = {
-        "pickup_count": pickup_count,
-        
+#GPS Tracking
+def map(request, slug):
+    map_obj = get_object_or_404(PickupRequest, id=slug)
+    latitude = map_obj.latitude
+    longitude = map_obj.longitude
+    google_maps_url = f"https://www.google.com/maps?q={latitude},{longitude}"
 
-    }
-    return render(request, 'recycler.html', args)
+    return redirect(google_maps_url)
+    
+
+
 

@@ -19,4 +19,5 @@ urlpatterns = [
     path('app/login/', AppLoginView.as_view(), name='applogin'),
     path('api/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
     path('api/contact/', ContactUsAPIView.as_view(), name='contact-us'),
+    path('map/<int:slug>', views.map, name= 'map'),
 ]
