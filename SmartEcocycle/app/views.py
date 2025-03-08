@@ -31,7 +31,15 @@ def userHomepage(request):
 def recyclerHomepage(request):
     if not request.session.get('is_authenticated'):  # Check session authentication
         return redirect('homepage')
-    return render(request, 'recycler.html')
+    pickup = PickupRequest.objects.filter()
+    pickup_count= len(pickup)
+    
+    
+    args = {
+        "pickup_count": pickup_count,
+        
+    }
+    return render(request, 'recycler.html',args)
 
 
 # Signup
@@ -159,4 +167,24 @@ class ContactUsAPIView(APIView):
             serializer.save()
             return Response({'message': 'Your message has been sent successfully!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+#Recycler Dashboard
+#Admin Dashboard
+def recycler_dashboard(request):
+    
+    pickup = PickupRequest.objects.filter()
+    pickup_count= len(pickup)
+    all_users = User.objects.all()
+    user_count = len(all_users)
+    
+    
+    
+    
+    args = {
+        "pickup_count": pickup_count,
+        
+
+    }
+    return render(request, 'recycler.html', args)
 
