@@ -9,6 +9,8 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 
 #homepage
 def viewHomepage(request):
@@ -179,6 +181,50 @@ def map(request, slug):
     google_maps_url = f"https://www.google.com/maps?q={latitude},{longitude}"
 
     return redirect(google_maps_url)
+
+
+#Recycler
+def add_recycler(request):
+    return render(request, "addRecycler.html")
+
+
+@api_view(['GET', 'POST'])
+@csrf_exempt
+def recycler_list_create(request):
+    if request.method == 'GET':
+        recyclers = Recycler.objects.all()
+        serializer = RecyclerSerializer(recyclers, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = RecyclerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+def recycler_detail(request, pk):
+    try:
+        recycler = Recycler.objects.get(pk=pk)
+    except Recycler.DoesNotExist:
+        return Response({"error": "Recycler not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = RecyclerSerializer(recycler)
+        return Response(serializer.data)
+
+    elif request.method in ['PUT', 'PATCH']:
+        serializer = RecyclerSerializer(recycler, data=request.data, partial=(request.method == 'PATCH'))
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        recycler.delete()
+        return Response({"message": "Recycler deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
     
 
 

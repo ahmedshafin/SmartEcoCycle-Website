@@ -1,6 +1,6 @@
 # signup/serializers.py
 from rest_framework import serializers
-from .models import UserSignup,contactUsModel,PickupRequest
+from .models import UserSignup,contactUsModel,PickupRequest, Recycler
 from django.contrib.auth.models import User
 
 class UserSignupSerializer(serializers.ModelSerializer):
@@ -30,4 +30,10 @@ class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = contactUsModel
         fields = '__all__'
+
+
+class RecyclerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recycler
+        fields = '__all__'  # Includes all model fields
   

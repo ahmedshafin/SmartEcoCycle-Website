@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Recyclers</title>
+    <link rel="stylesheet" href="/static/addRecycler.css">
+    <script defer src="/static/addRecycler.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h2>Manage Recyclers</h2>
+            <div class="actions">
+                <input type="text" id="search" placeholder="Search Recycler...">
+                <button class="add-btn" id="show-form-btn">+ Add Recycler</button>
+            </div>
+        </header>
+
+        <!-- Recycler Form (Initially Hidden) -->
+        <div id="recycler-form" class="form-container">
+            <h3>Add New Recycler</h3>
+            <form id="recyclerForm">
+                
+                <label>Name:</label>
+                <input type="text" id="name" required>
+                
+                <label>Contact Number:</label>
+                <input type="text" id="contact_number" required>
+                
+                <label>Assigned Area:</label>
+                <input type="text" id="assigned_area" required>
+                
+                <label>Status:</label>
+                <select id="status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="submit-btn">Submit</button>
+                    <button type="button" id="cancel-btn" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Recycler Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact Info</th>
+                    <th>Assigned Area</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="recyclerTable">
+                <!-- Recycler data will be inserted here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -27,4 +27,13 @@ class PickupRequestAdmin(admin.ModelAdmin):
 admin.site.register(PickupRequest, PickupRequestAdmin)
 
 
+@admin.register(Recycler)
+class RecyclerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'contact_number', 'assigned_area', 'status', 'created_at')
+    list_filter = ('status', 'assigned_area')
+    search_fields = ('name', 'contact_number', 'assigned_area')
+    ordering = ('-created_at',)
+    list_per_page = 20  # Pagination for better readability
+
+
 

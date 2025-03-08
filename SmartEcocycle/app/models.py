@@ -24,11 +24,6 @@ class contactUsModel(models.Model):
     contactMessage = models.TextField()
 
 
-#Pickup
-
-
-
-
 class PickupRequest(models.Model):
     address = models.CharField(max_length=255, default="Unknown")
     quantity = models.CharField(max_length=50, default="Unknown")
@@ -40,4 +35,21 @@ class PickupRequest(models.Model):
 
     def __str__(self):
         return f"Pickup at {self.address} ({self.quantity})"
+    
+
+#Recycler
+class Recycler(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+
+    name = models.CharField(max_length=100)
+    contact_number = models.CharField(max_length=15, unique=True)
+    assigned_area = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
