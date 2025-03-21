@@ -61,8 +61,26 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="recyclerTable">
-                <!-- Recycler data will be inserted here dynamically -->
+            <tbody>
+                {% for i in recycler %}
+                <tr>
+                    <td>
+                        <p>{{i.name}}</p>
+                    </td>
+                    <td>
+                        <p>{{i.contact_number}}</p>
+                    </td>
+                    <td>
+                        <p>{{i.assigned_area}}</p>
+                    </td>
+                    <td>
+                        <p>{{i.status}}</p>
+                    </td>
+                    
+                </tr>
+                    
+                
+                {% endfor %}
             </tbody>
         </table>
     </div>

@@ -36,11 +36,14 @@ def recyclerHomepage(request):
         return redirect('homepage')
     pickup = PickupRequest.objects.filter()
     pickup_count= len(pickup)
+    recycler = Recycler.objects.filter()
+    available_recycler= len(recycler)
     
     
     args = {
         "pickup": pickup,
         "pickup_count": pickup_count,
+        "available_recycler": available_recycler,
         
     }
     return render(request, 'recycler.html',args)
@@ -185,7 +188,18 @@ def map(request, slug):
 
 #Recycler
 def add_recycler(request):
-    return render(request, "addRecycler.html")
+    recycler = Recycler.objects.filter()
+    
+    
+    
+    args = {
+        "recycler": recycler,
+        
+
+           
+    }
+
+    return render(request, "addRecycler.html",args)
 
 
 @api_view(['GET', 'POST'])
