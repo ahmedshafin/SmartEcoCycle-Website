@@ -52,4 +52,15 @@ class Recycler(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class assigned_recycler(models.Model):
+
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, default='active')
+    address = models.CharField(max_length=255, default="Unknown")
+    quantity = models.CharField(max_length=50, default="Unknown")
+    latitude = models.FloatField( null=True)
+    longitude = models.FloatField( null=True)
+
 

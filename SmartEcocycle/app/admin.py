@@ -35,5 +35,13 @@ class RecyclerAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     list_per_page = 20  # Pagination for better readability
 
+@admin.register(assigned_recycler)
+class AssignedRecyclerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'status', 'address', 'quantity', 'latitude', 'longitude')
+    list_filter = ('status',)
+    search_fields = ('name', 'address')
+    ordering = ('name',)
+
+
 
 

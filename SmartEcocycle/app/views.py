@@ -44,6 +44,7 @@ def recyclerHomepage(request):
         "pickup": pickup,
         "pickup_count": pickup_count,
         "available_recycler": available_recycler,
+        "recycler": recycler, 
         
     }
     return render(request, 'recycler.html',args)
@@ -194,9 +195,7 @@ def add_recycler(request):
     
     args = {
         "recycler": recycler,
-        
-
-           
+                   
     }
 
     return render(request, "addRecycler.html",args)
@@ -238,6 +237,25 @@ def recycler_detail(request, pk):
     elif request.method == 'DELETE':
         recycler.delete()
         return Response({"message": "Recycler deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    
+
+#assigning the work to the teams
+def resolve(request, slug):
+    delReport = PickupRequest.objects.get(id=slug)
+    if request.method == 'POST':
+        teamName = request.POST.get('teamName')
+        status = 'Inactive'
+        teams = assigned_recycler(name=teamName, status=status, address=delReport.address,quantity=
+                             delReport.quantity,latitude=delReport.latitude,longitude=delReport.longitude)
+        teams.save()
+    
+    delTeam = Recycler.objects.get(name=teamName)
+    
+    delTeam.delete()
+    
+    delReport.delete()
+    
+    return redirect('recycler')
 
     
 
