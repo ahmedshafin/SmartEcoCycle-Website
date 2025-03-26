@@ -6,6 +6,10 @@ class UserSignup(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
     role = models.CharField(max_length=50)
+    total_pickup = models.IntegerField(default=0)
+    total_recycled = models.IntegerField(default=0)
+    rating = models.FloatField(default=5)
+    
     
     # Additional fields for Recycle Center
     center_name = models.CharField(max_length=255, null=True, blank=True)

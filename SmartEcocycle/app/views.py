@@ -14,7 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 
-
 #homepage
 def viewHomepage(request):
     return render(request, 'index.html')
@@ -136,6 +135,7 @@ class AppSignupView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
+#App login
 class AppLoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
@@ -146,10 +146,13 @@ class AppLoginView(APIView):
 
             # Secure password comparison (replace with hashed password check)
             if user.password == password:
-                # Return user role and success message
                 return Response({
                     'message': 'Login successful',
                     'role': user.role,
+                    'full_name': user.full_name,
+                    'rating': user.rating,
+                    'total_pickup': user.total_pickup,
+                    'total_recycled': user.total_recycled,
                 }, status=status.HTTP_200_OK)
             else:
                 return Response({'message': 'Invalid password'}, status=status.HTTP_401_UNAUTHORIZED)
