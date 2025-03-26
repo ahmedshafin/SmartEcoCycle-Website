@@ -260,12 +260,16 @@
                                 <div class="dropdown">
                                     <button class="dropbtn">Assign</button>
                                     <div class="dropdown-content">
+                                        <!-- Status active -->
                                         {% for team in recycler %}
-                                        <form action="{% url 'resolve' i.id %}" method="POST" style="margin: 0;">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="teamName" value="{{ team.name }}">
-                                            <button type="submit" class="dropdown-item">{{ team.name }}</button>
-                                        </form>
+                                            {% if team.status == 'Active' %}
+                                                <form action="{% url 'resolve' i.id %}" method="POST" style="margin: 0;">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="teamName" value="{{ team.name }}">
+                                                    <button type="submit" class="dropdown-item">{{ team.name }}</button>
+                                                </form>
+                                            
+                                            {% endif %}
                                         {% endfor %}
                                     </div>
                                 </div>

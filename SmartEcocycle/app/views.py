@@ -202,11 +202,18 @@ def resolve(request, slug):
         status = 'Inactive'
         teams = assigned_recycler(name=teamName, status=status, address=delReport.address,quantity=
                              delReport.quantity,latitude=delReport.latitude,longitude=delReport.longitude)
+        try:
+            recycler = RecyclerCreate.objects.get(name=teamName)
+            recycler.status = 'Inactive'  # Update status
+            recycler.save()
+        except RecyclerCreate.DoesNotExist:
+            return HttpResponse("Recycler not found", status=404)
+
         teams.save()
     
-    delTeam = RecyclerCreate.objects.get(name=teamName)
+    """ delTeam = RecyclerCreate.objects.get(name=teamName) """
     
-    delTeam.delete()
+    """ delTeam.delete() """
     
     delReport.delete()
     

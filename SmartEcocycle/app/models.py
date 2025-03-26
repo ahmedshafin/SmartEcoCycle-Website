@@ -53,7 +53,7 @@ class assigned_recycler(models.Model):
 
 # creating recyclers
 class RecyclerCreate(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     contact_number = models.CharField(max_length=15, unique=True)
     assigned_area = models.CharField(max_length=100)
     status = models.CharField(max_length=10, choices=[('Active', 'Active'), ('Inactive', 'Inactive')])
