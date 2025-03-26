@@ -20,9 +20,11 @@ urlpatterns = [
     path('api/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
     path('api/contact/', ContactUsAPIView.as_view(), name='contact-us'),
     path('map/<int:slug>', views.map, name= 'map'),
-    path('api/recyclers/', recycler_list_create, name='recycler-list-create'),
-    path('api/recyclers/<int:pk>/', recycler_detail, name='recycler-detail'),
-    path('add_recycler/', views.add_recycler, name='add_recycler'),
     path('resolve/<int:slug>', views.resolve, name='resolve'),
+    path('api/recycler/login/', recycler_login, name='recycler_login'),
+    path('recyclers/', views.recycler_list, name='recycler-list'),
+    path('recyclers/<int:pk>/', views.recycler_detail, name='recycler-detail'),
+    path('create/recycler/', views.createRecycler, name='createRecycler'),
+
 
 ]

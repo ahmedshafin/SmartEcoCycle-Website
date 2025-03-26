@@ -37,23 +37,6 @@ class PickupRequest(models.Model):
         return f"Pickup at {self.address} ({self.quantity})"
     
 
-#Recycler
-class Recycler(models.Model):
-    STATUS_CHOICES = [
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
-    ]
-
-    name = models.CharField(max_length=100)
-    contact_number = models.CharField(max_length=15, unique=True)
-    assigned_area = models.CharField(max_length=100)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-    
-
 class assigned_recycler(models.Model):
 
     name = models.CharField(max_length=100)
@@ -63,4 +46,15 @@ class assigned_recycler(models.Model):
     latitude = models.FloatField( null=True)
     longitude = models.FloatField( null=True)
 
+
+# creating recyclers
+class RecyclerCreate(models.Model):
+    name = models.CharField(max_length=100)
+    contact_number = models.CharField(max_length=15, unique=True)
+    assigned_area = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, choices=[('Active', 'Active'), ('Inactive', 'Inactive')])
+    password = models.CharField(max_length=128)  # Store hashed passwords
+
+    def __str__(self):
+        return self.name
 

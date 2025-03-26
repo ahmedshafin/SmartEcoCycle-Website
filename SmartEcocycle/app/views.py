@@ -12,6 +12,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
 
+
+
+
 #homepage
 def viewHomepage(request):
     return render(request, 'index.html')
@@ -36,7 +39,7 @@ def recyclerHomepage(request):
         return redirect('homepage')
     pickup = PickupRequest.objects.filter()
     pickup_count= len(pickup)
-    recycler = Recycler.objects.filter()
+    recycler = RecyclerCreate.objects.filter()
     available_recycler= len(recycler)
     
     
@@ -187,57 +190,6 @@ def map(request, slug):
     return redirect(google_maps_url)
 
 
-#Recycler
-def add_recycler(request):
-    recycler = Recycler.objects.filter()
-    
-    
-    
-    args = {
-        "recycler": recycler,
-                   
-    }
-
-    return render(request, "addRecycler.html",args)
-
-
-@api_view(['GET', 'POST'])
-@csrf_exempt
-def recycler_list_create(request):
-    if request.method == 'GET':
-        recyclers = Recycler.objects.all()
-        serializer = RecyclerSerializer(recyclers, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = RecyclerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def recycler_detail(request, pk):
-    try:
-        recycler = Recycler.objects.get(pk=pk)
-    except Recycler.DoesNotExist:
-        return Response({"error": "Recycler not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = RecyclerSerializer(recycler)
-        return Response(serializer.data)
-
-    elif request.method in ['PUT', 'PATCH']:
-        serializer = RecyclerSerializer(recycler, data=request.data, partial=(request.method == 'PATCH'))
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        recycler.delete()
-        return Response({"message": "Recycler deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-    
 
 #assigning the work to the teams
 def resolve(request, slug):
@@ -249,13 +201,86 @@ def resolve(request, slug):
                              delReport.quantity,latitude=delReport.latitude,longitude=delReport.longitude)
         teams.save()
     
-    delTeam = Recycler.objects.get(name=teamName)
+    delTeam = RecyclerCreate.objects.get(name=teamName)
     
     delTeam.delete()
     
     delReport.delete()
     
     return redirect('recycler')
+
+
+
+# Recycler Login API View
+@api_view(['POST'])
+def recycler_login(request):
+    serializer = RecyclerLoginSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        
+        contact_number = serializer.validated_data['contact_number']
+        password = serializer.validated_data['password']
+        
+        try:
+            recycler = RecyclerCreate.objects.get(contact_number=contact_number)
+            if recycler.password == password:  # Simple password check
+                
+                return Response({
+                    "message": "Login successful",
+                    "recycler_id": recycler.id,
+                    "name": recycler.name,
+                    "status": recycler.status,
+                    "assigned_area": recycler.assigned_area,
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        except RecyclerCreate.DoesNotExist:
+            return Response({"error": "Recycler not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#New approach of creating recycler
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def recycler_list(request):
+    if request.method == 'GET':
+        recyclers = RecyclerCreate.objects.all()
+        serializer = RecyclerSerializerCreate(recyclers, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = RecyclerSerializerCreate(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@csrf_exempt
+@api_view(['GET', 'PUT', 'DELETE'])
+def recycler_detail(request, pk):
+    recycler = get_object_or_404(RecyclerCreate, pk=pk)
+
+    if request.method == 'GET':
+        serializer = RecyclerSerializerCreate(recycler)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = RecyclerSerializerCreate(recycler, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        recycler.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+def createRecycler(request):
+    return render(request, 'createRecycler.html')
+
 
     
 

@@ -26,11 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
             name: document.getElementById("name").value,
             contact_number: document.getElementById("contact_number").value,
             assigned_area: document.getElementById("assigned_area").value,
-            status: document.getElementById("status").value
+            password: document.getElementById("password").value,
+            status: document.getElementById("status").value,
+            
         };
-
+       
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/recyclers/", {
+            const response = await fetch("/api/recyclers/", {
+                
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
