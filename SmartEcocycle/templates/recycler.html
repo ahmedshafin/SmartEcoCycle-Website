@@ -246,6 +246,7 @@
                     </thead>
                     <tbody>
                         {% for i in pickup %}
+                        {% if i.status == 'Pending' %}
                         <tr>
                             <td>
                                 <p>{{i.address}}</p>
@@ -287,6 +288,7 @@
                         </tr>
                             
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>

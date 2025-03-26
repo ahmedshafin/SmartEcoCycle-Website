@@ -197,7 +197,10 @@ def map(request, slug):
 #assigning the work to the teams
 def resolve(request, slug):
     delReport = PickupRequest.objects.get(id=slug)
+    
     if request.method == 'POST':
+        delReport.status = 'Assigned'
+        delReport.save()
         teamName = request.POST.get('teamName')
         status = 'Inactive'
         teams = assigned_recycler(name=teamName, status=status, address=delReport.address,quantity=
@@ -211,11 +214,7 @@ def resolve(request, slug):
 
         teams.save()
     
-    """ delTeam = RecyclerCreate.objects.get(name=teamName) """
     
-    """ delTeam.delete() """
-    
-    delReport.delete()
     
     return redirect('recycler')
 
