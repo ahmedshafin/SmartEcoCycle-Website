@@ -2,6 +2,7 @@
 from django.urls import path
 from . import views 
 from .views import *
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('', views.viewHomepage, name='homepage'),
@@ -25,6 +26,8 @@ urlpatterns = [
     path('recyclers/', views.recycler_list, name='recycler-list'),
     path('recyclers/<int:pk>/', views.recycler_detail, name='recycler-detail'),
     path('create/recycler/', views.createRecycler, name='createRecycler'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    
 
 
 ]

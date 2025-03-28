@@ -11,6 +11,7 @@ from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 
@@ -136,6 +137,7 @@ class AppSignupView(APIView):
     
 
 #App login
+#Security Issue
 class AppLoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
@@ -143,9 +145,12 @@ class AppLoginView(APIView):
 
         try:
             user = UserSignup.objects.get(email=email)
-
-            # Secure password comparison (replace with hashed password check)
-            if user.password == password:
+            
+            # Secure password checking
+            if (password == user.password):
+                # Generate JWT tokens
+                refresh = RefreshToken.for_user(user)
+                
                 return Response({
                     'message': 'Login successful',
                     'role': user.role,
@@ -153,11 +158,15 @@ class AppLoginView(APIView):
                     'rating': user.rating,
                     'total_pickup': user.total_pickup,
                     'total_recycled': user.total_recycled,
+                    'tokens': {
+                        'refresh': str(refresh),
+                        'access': str(refresh.access_token),
+                    }
                 }, status=status.HTTP_200_OK)
             else:
-                return Response({'message': 'Invalid password'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         except UserSignup.DoesNotExist:
-            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
         
 
 class PickupRequestView(APIView):
@@ -289,6 +298,9 @@ def recycler_detail(request, pk):
 
 def createRecycler(request):
     return render(request, 'createRecycler.html')
+
+
+
 
 
     
