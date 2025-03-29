@@ -9,7 +9,7 @@ class UserSignupSerializer(Serializer):
     full_name = CharField(max_length=255, required=True)
     role = CharField(max_length=50, required=True)
     password = CharField(max_length=128, write_only=True, required=True)
-    rating = FloatField(default=0.0, required=False)
+    rating = FloatField(default=5.0, required=False)
     total_pickup = IntegerField(default=0, required=False)
     total_recycled = FloatField(default=0.0, required=False)
 
