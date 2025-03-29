@@ -1,4 +1,3 @@
-# signup/views.py
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -150,8 +149,7 @@ class AppSignupView(APIView):
     
 
 #App login
-#Security Issue
-#grok fix
+
 class AppLoginView(APIView):
     authentication_classes = []
     permission_classes = []
@@ -196,18 +194,26 @@ class AppLoginView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
         
-#Dynamic Pickup
+
 
 class PickupRequestView(APIView):
     permission_classes = [IsAuthenticated]
     
+    
     def post(self, request):
+        increment = UserSignup.objects.get(email = request.user)
+        increment.total_pickup += 1  # Properly increment the field
+        print(request.data)
+        quantity = int(request.data.get("quantity", 0))  # Default to 0 if key is missing
+        
+        increment.total_recycled += quantity
+        increment.save()  # Save the changes to the database
         
         with transaction.atomic():  # Ensure consistency
             
             serializer = PickupRequestSerializer(data=request.data, context={'request': request})
             if serializer.is_valid():
-
+                
                 serializer.save()
                 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -323,7 +329,7 @@ def recycler_login(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#New approach of creating recycler
+
 @csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])  # Allow anyone to access this endpoint

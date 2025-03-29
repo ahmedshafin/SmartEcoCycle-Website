@@ -1,4 +1,3 @@
-# signup/urls.py
 from django.urls import path
 from . import views 
 from .views import *
@@ -27,7 +26,6 @@ urlpatterns = [
     path('recyclers/<int:pk>/', views.recycler_detail, name='recycler-detail'),
     path('create/recycler/', views.createRecycler, name='createRecycler'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    #New Pickup collision
     path('api/pickup-requests/', PickupRequestView.as_view(), name='pickup-requests'),
     path('api/pickup-requests/<int:pk>/update-status/', UpdatePickupStatusView.as_view(), name='update-status'),
 

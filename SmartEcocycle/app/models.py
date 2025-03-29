@@ -1,10 +1,9 @@
-# signup/models.py
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.exceptions import ValidationError
-#grok
-#create superuser
+
 class UserSignupManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         
@@ -41,9 +40,9 @@ class UserSignup(AbstractBaseUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=255)
     role = models.CharField(max_length=50, default='user')
-    rating = models.FloatField(default=0.0)
+    rating = models.FloatField(default=5.0)
     total_pickup = models.IntegerField(default=0)
-    total_recycled = models.FloatField(default=0.0)
+    total_recycled = models.IntegerField(default=0)
     
     # Add these fields for admin access
     is_staff = models.BooleanField(default=False)
@@ -74,7 +73,7 @@ class contactUsModel(models.Model):
     contactSubject = models.CharField(max_length=50)
     contactMessage = models.TextField()
 
-#Dynamic Update to user
+
 class PickupRequest(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
@@ -84,7 +83,7 @@ class PickupRequest(models.Model):
     ]
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     address = models.CharField(max_length=255, default="Unknown")
-    quantity = models.CharField(max_length=50, default="Unknown")
+    quantity = models.IntegerField()
     contact = models.CharField(max_length=15, default="Unknown")
     latitude = models.DecimalField(max_digits=9, decimal_places=7)
     longitude = models.DecimalField(max_digits=9, decimal_places=7)
@@ -101,7 +100,7 @@ class assigned_recycler(models.Model):
     name = models.CharField(max_length=100)
     status = models.CharField(max_length=10, default='active')
     address = models.CharField(max_length=255, default="Unknown")
-    quantity = models.CharField(max_length=50, default="Unknown")
+    quantity = models.IntegerField()
     latitude = models.FloatField( null=True)
     longitude = models.FloatField( null=True)
 

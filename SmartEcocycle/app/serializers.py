@@ -41,7 +41,7 @@ class contactSerializer(serializers.ModelSerializer):
 
 
 
-#Dynamic Status user
+
 class PickupRequestSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(  # Change from PrimaryKeyRelatedField to HiddenField
         default=serializers.CurrentUserDefault()
@@ -72,7 +72,7 @@ class RecyclerLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 
-#New approach
+
 class RecyclerSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = RecyclerCreate
