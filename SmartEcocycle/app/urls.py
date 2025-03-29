@@ -18,7 +18,7 @@ urlpatterns = [
     path('logout/',views.logout, name='logout'),
     path('superAdmin/',views.superAdmin, name='superAdmin'),
     path('app/login/', AppLoginView.as_view(), name='applogin'),
-    path('api/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
+    path('app/pickup-requests/', PickupRequestCreateView.as_view(), name='pickup-request-create'),
     path('api/contact/', ContactUsAPIView.as_view(), name='contact-us'),
     path('map/<int:slug>', views.map, name= 'map'),
     path('resolve/<int:slug>', views.resolve, name='resolve'),
@@ -27,7 +27,9 @@ urlpatterns = [
     path('recyclers/<int:pk>/', views.recycler_detail, name='recycler-detail'),
     path('create/recycler/', views.createRecycler, name='createRecycler'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    
+    #New Pickup collision
+    path('api/pickup-requests/', PickupRequestView.as_view(), name='pickup-requests'),
+    path('api/pickup-requests/<int:pk>/update-status/', UpdatePickupStatusView.as_view(), name='update-status'),
 
 
 ]

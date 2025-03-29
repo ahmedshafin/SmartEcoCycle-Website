@@ -9,10 +9,12 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
+from rest_framework.permissions import AllowAny
 
 
 #homepage
@@ -55,6 +57,7 @@ def recyclerHomepage(request):
 
 # Signup
 class UserSignupView(APIView):
+    permission_classes = [AllowAny]  # This allows anyone to access this view
     def post(self, request, *args, **kwargs):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
@@ -67,15 +70,18 @@ class UserSignupView(APIView):
 
 #Login Authorization
 class LoginView(APIView):
+    permission_classes = [AllowAny]  # This allows anyone to access this view
     def post(self, request):
+        
         email = request.data.get('email')
         password = request.data.get('password')
+        
 
         try:
             user = UserSignup.objects.get(email=email)
 
             # Secure password comparison
-            if user.password == password:
+            if check_password(password,user.password):
                 # Set session
                 request.session['is_authenticated'] = True
                 request.session['user_role'] = user.role
@@ -98,6 +104,7 @@ class LoginView(APIView):
 
 #Contact Us
 class contactUs(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         
         serializer = contactSerializer(data=request.data)
@@ -128,28 +135,43 @@ def superAdmin(request):
 #App signup
 
 class AppSignupView(APIView):
+    authentication_classes = []  # No authentication required
+    permission_classes = []      # No permissions required
+
     def post(self, request, *args, **kwargs):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+            serializer.save()  # Creates the user with hashed password
+            return Response(
+                {"message": "User registered successfully"},
+                status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 #App login
 #Security Issue
+#grok fix
 class AppLoginView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
 
+        if not email or not password:
+            return Response(
+                {'message': 'Email and password are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         try:
             user = UserSignup.objects.get(email=email)
-            
-            # Secure password checking
-            if (password == user.password):
-                # Generate JWT tokens
+            # Assuming passwords are hashed; if not, update signup to hash them
+            if check_password(password, user.password):  # Use hashed password check
                 refresh = RefreshToken.for_user(user)
+                
                 
                 return Response({
                     'message': 'Login successful',
@@ -164,19 +186,59 @@ class AppLoginView(APIView):
                     }
                 }, status=status.HTTP_200_OK)
             else:
-                return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response(
+                    {'message': 'Invalid credentials'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
         except UserSignup.DoesNotExist:
-            return Response({'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {'message': 'Invalid credentials'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
         
+#Dynamic Pickup
 
 class PickupRequestView(APIView):
-    def post(self, request):
-        serializer = PickupRequestSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'Pickup request created successfully!'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [IsAuthenticated]
     
+    def post(self, request):
+        
+        with transaction.atomic():  # Ensure consistency
+            
+            serializer = PickupRequestSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+
+                serializer.save()
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+            
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+     
+    def get(self, request):
+        
+        requests = PickupRequest.objects.filter(user=request.user).order_by('-created_at')
+        serializer = PickupRequestSerializer(requests, many=True)
+        return Response(serializer.data)
+    
+
+class UpdatePickupStatusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        try:
+            pickup = PickupRequest.objects.get(pk=pk, user=request.user)
+            new_status = request.data.get('status')
+            if new_status not in dict(PickupRequest.STATUS_CHOICES).keys():
+                return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
+            pickup.status = new_status
+            pickup.save()
+            serializer = PickupRequestSerializer(pickup)
+            return Response(serializer.data)
+        except PickupRequest.DoesNotExist:
+            return Response({'error': 'Pickup request not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class PickupRequestCreateView(generics.CreateAPIView):
     queryset = PickupRequest.objects.all()
@@ -184,6 +246,7 @@ class PickupRequestCreateView(generics.CreateAPIView):
 
 
 class ContactUsAPIView(APIView):
+    permission_classes = []
     def post(self, request, format=None):
         serializer = ContactUsSerializer(data=request.data)
         if serializer.is_valid():
@@ -231,7 +294,9 @@ def resolve(request, slug):
 
 # Recycler Login API View
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def recycler_login(request):
+
     serializer = RecyclerLoginSerializer(data=request.data)
     
     if serializer.is_valid():
@@ -261,7 +326,9 @@ def recycler_login(request):
 #New approach of creating recycler
 @csrf_exempt
 @api_view(['GET', 'POST'])
+@permission_classes([AllowAny])  # Allow anyone to access this endpoint
 def recycler_list(request):
+    
     if request.method == 'GET':
         recyclers = RecyclerCreate.objects.all()
         serializer = RecyclerSerializerCreate(recyclers, many=True)
@@ -276,7 +343,9 @@ def recycler_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])  # Allow anyone to access this endpoint
 def recycler_detail(request, pk):
+     
     recycler = get_object_or_404(RecyclerCreate, pk=pk)
 
     if request.method == 'GET':
@@ -297,7 +366,10 @@ def recycler_detail(request, pk):
     
 
 def createRecycler(request):
+    if not request.session.get('is_authenticated'):  # Check session authentication
+        return redirect('homepage')
     return render(request, 'createRecycler.html')
+
 
 
 
