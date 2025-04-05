@@ -4,135 +4,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Page</title>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <title>Contact Messages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
 
-.container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
 
-h1 {
-    text-align: center;
-}
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            position: relative;
+        }
 
-.message {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #3498db;
+            margin: 10px auto;
+            border-radius: 2px;
+        }
 
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
+        .message-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
+        .message-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            border-left: 5px solid #3498db;
+        }
 
-.button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: rgb(20, 20, 20);
-  border: none;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
-  cursor: pointer;
-  transition-duration: 0.3s;
-  overflow: hidden;
-  position: relative;
-}
+        .message-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.svgIcon {
-  width: 12px;
-  transition-duration: 0.3s;
-}
+        .message-card p {
+            margin: 12px 0;
+            color: #34495e;
+            font-size: 0.95em;
+        }
 
-.svgIcon path {
-  fill: white;
-}
+        .message-card p strong {
+            color: #2c3e50;
+            margin-right: 8px;
+        }
 
-.button:hover {
-  width: 140px;
-  border-radius: 50px;
-  transition-duration: 0.3s;
-  background-color: rgb(181, 160, 255);
-  align-items: center;
-}
+        .done-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
 
-.button:hover .svgIcon {
-  /* width: 20px; */
-  transition-duration: 0.3s;
-  transform: translateY(-200%);
-}
+        .done-btn:hover {
+            background: #219a52;
+        }
 
-.button::before {
-  position: absolute;
-  bottom: -20px;
-  content: "Back to Top";
-  color: white;
-  /* transition-duration: .3s; */
-  font-size: 0px;
-}
+        .back-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #3498db;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            transition: transform 0.3s ease;
+        }
 
-.button:hover::before {
-  font-size: 13px;
-  opacity: 1;
-  bottom: unset;
-  /* transform: translateY(-30px); */
-  transition-duration: 0.3s;
-}
+        .back-btn:hover {
+            transform: translateY(-3px);
+        }
 
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Contact Us</h1>
+        <h1>Contact Messages</h1>
         
-        <a href="{% url 'recycler' %}" class="button">
-        <button class="button">
-            <svg class="svgIcon" viewBox="0 0 384 512">
-              <path
-                d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
-              ></path>
-            </svg>
-          </button>
-        </a>
-
-
-        {% for i in contacts %}
-        <div class="message">
-            <p>Name: {{i.contactFullName}} </p>
-            <p>Email: {{i.contactEmail}}</p>
-            <p>Phone Number: {{i.contactPhoneNumber}}</p>
-            <p>Subject: {{i.contactSubject}}</p>
-            <p>Message: {{i.contactMessage}}</p>
-            <form action="{% url 'deleteContact' i.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" name="track" value="Done">
-            </form>
+        {% if contacts %}
+        <div class="message-grid">
+            {% for i in contacts %}
+            <div class="message-card">
+                <p><strong><i class="fas fa-user"></i> Name:</strong> {{i.contactFullName}}</p>
+                <p><strong><i class="fas fa-envelope"></i> Email:</strong> {{i.contactEmail}}</p>
+                <p><strong><i class="fas fa-phone"></i> Phone:</strong> {{i.contactPhoneNumber}}</p>
+                <p><strong><i class="fas fa-comment"></i> Subject:</strong> {{i.contactSubject}}</p>
+                <p><strong><i class="fas fa-edit"></i> Message:</strong> {{i.contactMessage}}</p>
+                <form action="{% url 'deleteContact' i.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="done-btn">
+                        <i class="fas fa-check"></i>
+                        Mark as Read
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No messages found</h3>
+            <p>All caught up! No contact messages to display.</p>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'recycler' %}" class="back-btn">
+            <i class="fas fa-arrow-up"></i>
+        </a>
     </div>
 </body>
 </html>

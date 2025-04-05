@@ -102,7 +102,7 @@ class LoginView(APIView):
         return render(request, 'index.html')
         
 
-#Contact Us
+#Contact Us using Post
 class contactUs(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
@@ -379,6 +379,8 @@ def createRecycler(request):
 
 #Contact admin
 def displayContactView(request):
+    if not request.session.get('is_authenticated'):  # Check session authentication
+        return redirect('homepage')
     contacts = contactUsModel.objects.filter()
     
     args = {
