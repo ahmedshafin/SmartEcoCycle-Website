@@ -42,14 +42,15 @@ def recyclerHomepage(request):
     pickup_count= len(pickup)
     recycler = RecyclerCreate.objects.filter()
     available_recycler= len(recycler)
-    
+    contact = contactUsModel.objects.filter()
+    number_of_contacts = len(contact)
     
     args = {
         "pickup": pickup,
         "pickup_count": pickup_count,
         "available_recycler": available_recycler,
         "recycler": recycler, 
-        
+        "number_of_contacts" : number_of_contacts,
     }
     return render(request, 'recycler.html',args)
 
@@ -329,7 +330,7 @@ def recycler_login(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+#Creation of recyclers management..
 @csrf_exempt
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])  # Allow anyone to access this endpoint
@@ -341,7 +342,7 @@ def recycler_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = RecyclerSerializerCreate(data=request.data)
+        serializer = RecyclerSerializerCreate(data=request.data) #seriallizing the frontend data
         
         if serializer.is_valid():
             serializer.save()
@@ -375,6 +376,24 @@ def createRecycler(request):
     if not request.session.get('is_authenticated'):  # Check session authentication
         return redirect('homepage')
     return render(request, 'createRecycler.html')
+
+#Contact admin
+def displayContactView(request):
+    contacts = contactUsModel.objects.filter()
+    
+    args = {
+        "contacts": contacts,  
+    }
+    return render(request, "contactAdmin.html",args)
+
+
+def deleteContact(request, slug):
+    certificate = contactUsModel.objects.get(id=slug)
+    certificate.delete()
+
+        # Appending the search query for nearby lakes to the Google Maps URL
+    
+    return redirect('displayContact')
 
 
 

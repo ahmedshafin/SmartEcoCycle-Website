@@ -130,12 +130,12 @@
                     </span>
                     <h3>Recycle Center</h3>
                 </a>
-                <a href="#">
+                <a href="{% url 'displayContact' %}">
                     <span class="material-icons-sharp">
                         mail_outline
                     </span>
                     <h3>Contact</h3>
-                    <span class="message-count">27</span>
+                    <span class="message-count">{{number_of_contacts}}</span>
                 </a>
                 <a href="#">
                     <span class="material-icons-sharp">

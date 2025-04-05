@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('api/pickup-requests/', PickupRequestView.as_view(), name='pickup-requests'),
     path('api/pickup-requests/<int:pk>/update-status/', UpdatePickupStatusView.as_view(), name='update-status'),
+    path('displayContact/', views.displayContactView, name = "displayContact"),
+    path('deleteContact/<int:slug>', views.deleteContact, name = "deleteContact"),
 
 
 ]
